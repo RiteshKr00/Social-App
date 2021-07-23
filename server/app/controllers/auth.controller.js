@@ -3,13 +3,14 @@ const db = require("../models");
 const User = db.user;
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
+const JWT = process.env.JWT_SEC;
 
 exports.signup = async (req, res) => {
   //save to db
   try {
     const { username, email, password } = req.body;
     if (!email || !password || !username) {
-      return res.status(422).json({ error: "please add all the fields" });
+      return res.status(422).send({ error: "please add all the fields" });
     }
 
     const user = new User({
@@ -19,8 +20,39 @@ exports.signup = async (req, res) => {
     });
     await user.save();
 
-    res.status(200).json({ message: "User was registered successfully!" });
+    res.status(200).send({ message: "User was registered successfully!" });
   } catch (err) {
-    res.status(400).json({ err: err });
+    res.status(500).send({ err: err });
+  }
+};
+
+exports.signin = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
+    if (!user) {
+      res.status(404).send({ messae: "User Not Found" });
+    }
+    const passwordIsValid = bcrypt.compareSync(
+      req.body.password,
+      user.password
+    );
+    if (!passwordIsValid) {
+      return res.status(401).send({
+        accessToken: null,
+        message: "Invalid Password!",
+      });
+    }
+    var token = jwt.sign({ id: user.id }, JWT, {
+      expiresIn: 86400, // 24 hours
+    });
+
+    res.status(200).send({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      accessToken: token,
+    });
+  } catch (err) {
+    res.status(500).send({ err: err });
   }
 };

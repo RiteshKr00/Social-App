@@ -3,7 +3,13 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
-app.use(cors());
+
+//Instead of manually specifying the headers, there is a CORS Express middleware package that can be used instead.
+var corsOptions = {
+  origin: "*", // restrict calls to those this address
+};
+// NEW - replace custom middleware with the cors() middleware
+app.use(cors(corsOptions));
 
 mongoose.connect("mongodb://localhost:27017/GramDB", {
   useNewUrlParser: true,
@@ -20,7 +26,10 @@ mongoose.connection.on("error", () => {
 // require("./app/models/user");
 
 app.use(express.json()); //repalcement of bodyparser
+//
 require("./app/routes/auth.routes")(app);
+require("./app/routes/post.routes")(app);
+
 app.listen(process.env.PORT, () => {
   console.log("Server is runnng at port", process.env.PORT);
 });

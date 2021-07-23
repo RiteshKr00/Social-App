@@ -7,6 +7,7 @@ module.exports = function (app) {
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"
+      //can be done by cors package
     );
     next();
   });
@@ -17,5 +18,6 @@ module.exports = function (app) {
     [verifySignUp.checkDuplicateUsernameOrEmail],
     authcontroller.signup
   );
-};
 
+  app.post("/signin", authcontroller.signin);
+};
