@@ -7,7 +7,7 @@ checkDuplicateUsernameOrEmail = async (req, res, next) => {
       username: req.body.username,
     });
     if (user) {
-      res.status(400).send({ message: "Failed! Username is already in use!" });
+      res.status(400).json({ message: "Failed! Username is already in use!" });
       return;
     }
 

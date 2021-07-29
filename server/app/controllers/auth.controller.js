@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (!email || !password || !username) {
-      return res.status(422).send({ error: "please add all the fields" });
+      return res.status(400).send({ error: "please add all the fields" });
     }
 
     const user = new User({
