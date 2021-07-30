@@ -28,9 +28,13 @@ exports.signup = async (req, res) => {
 
 exports.signin = async (req, res) => {
   try {
+    const { username, password } = req.body;
+    if (!password || !username) {
+      return res.status(400).send({ error: "please add all the fields" });
+    }
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
-      res.status(404).send({ messae: "User Not Found" });
+      res.status(404).send({ message: "User Not Found" });
     }
     const passwordIsValid = bcrypt.compareSync(
       req.body.password,

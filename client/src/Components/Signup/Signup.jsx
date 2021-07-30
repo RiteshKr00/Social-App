@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import Toast from "../Toast/Toast";
 import styles from "./SignUp.module.css";
 const axios = require("axios");
 
@@ -6,9 +8,17 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const PostData = async () => {
+  const history = useHistory();
+  const Register = async () => {
     try {
+      if (
+        !/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+          email
+        )
+      ) {
+        Toast("Invalid Email", 2);
+        return;
+      }
       const response = await axios.post("http://localhost:8080/signup", {
         username: username,
         email: email,
@@ -16,8 +26,12 @@ const Signup = () => {
       });
       console.log(response);
       console.log(response.data);
+      history.push("/login");
+      Toast(response.data.message, 1);
     } catch (err) {
       console.log(err.response.data);
+      Toast(err.response.data.error, 2);
+      Toast(err.response.data.message, 2);
     }
   };
 
@@ -75,7 +89,7 @@ const Signup = () => {
             className={
               "py-2 px-4 text-white rounded bg-gray-700 hover:bg-gray-800  active:border-black"
             }
-            onClick={() => PostData()}
+            onClick={() => Register()}
           >
             Signup
           </button>

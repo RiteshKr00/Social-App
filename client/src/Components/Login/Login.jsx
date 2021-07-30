@@ -1,19 +1,44 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import Toast from "../Toast/Toast";
+const axios = require("axios");
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const history = useHistory();
+  const DoLogin = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/signin", {
+        username: username,
+        password: password,
+      });
+      console.log(response);
+      console.log(response.data);
+      history.push("/");
+      Toast("Logged In Successfully", 1);
+    } catch (err) {
+      //comment  before deploying
+      console.log(err.response.data);
+      console.log("this");
+      Toast(err.response.data.error, 2);
+      Toast(err.response.data.message, 2);
+    }
+  };
   return (
     <div className="flex bg-gray-100 py-8">
       <div className="w-full max-w-md bg-gradient-to-br from-green-400 to-blue-500 m-auto rounded-lg border border-gray-200 shadow-lg py-10 px-10 md:px-20">
         <h2 className="text-2xl text-center pt-4 pb-5 text-primary	">
           Social App
         </h2>
-        <form>
+        <>
           <div>
             <label htmlFor="username">Username</label>
             <input
               type="text"
               id="username"
               placeholder="Your Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className={
                 "w-full p-2 text-primary rounded-md transition duration-150 ease-in-out mb-4"
               }
@@ -26,6 +51,8 @@ const Login = () => {
               type="password"
               id="password"
               placeholder="Your Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className={
                 "w-full  p-2 text-primary rounded-md transition duration-150 ease-in-out mb-4"
               }
@@ -36,6 +63,7 @@ const Login = () => {
             <button
               id="signup"
               type="submit"
+              onClick={() => DoLogin()}
               className={
                 "py-2 px-4 text-white rounded bg-gray-700 hover:bg-gray-800  active:border-black"
               }
@@ -43,7 +71,7 @@ const Login = () => {
               Login
             </button>
           </div>
-        </form>
+        </>
       </div>
     </div>
   );
