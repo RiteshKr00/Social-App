@@ -11,6 +11,7 @@ const postSchema = new mongoose.Schema(
     },
     photo: {
       type: String,
+      required: "true",
     },
     //child referencing
     postedBy: {

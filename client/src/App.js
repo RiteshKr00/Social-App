@@ -1,5 +1,6 @@
-import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Route, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Signup from "./Components/Signup/Signup";
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
@@ -9,11 +10,19 @@ import Home from "./Components/Home/Home";
 import Profile from "./Components/Profile/Profile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-function App() {
+import { userAdded } from "./reducers/usersSlice";
+const Routes = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("loggedUser"));
+    dispatch(userAdded(user));
+    if (!user) {
+      history.push("/login");
+    }
+  }, []);
   return (
-    <BrowserRouter>
-      <Navbar />
+    <switch>
       <Route exact path="/">
         <Home />
       </Route>{" "}
@@ -29,6 +38,14 @@ function App() {
       <Route exact path="/createpost">
         <CreatePost />
       </Route>
+    </switch>
+  );
+};
+function App() {
+  return (
+    <BrowserRouter>
+      <Navbar />
+      <Routes />
       <ToastContainer />
     </BrowserRouter>
   );

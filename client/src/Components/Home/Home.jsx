@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HeartIcon } from "@heroicons/react/solid";
-
+import { useHistory } from "react-router-dom";
 const Home = () => {
+  // const history = useHistory();
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("loggedUser"));
+  //   if(!user){
+  //     history.push("/login")
+  //   }
+  // }, []);//can be added later
   return (
     <div className=" mx-10 flex flex-col px-auto md:px-24 lg:px-56">
       <div className="border-4 border-purple-200 my-2 justify-center">

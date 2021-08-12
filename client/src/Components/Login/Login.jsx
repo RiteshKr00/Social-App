@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Toast from "../Toast/Toast";
+import { userAdded } from "../../reducers/usersSlice";
 const axios = require("axios");
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
+  const dispatch = useDispatch();
   const DoLogin = async () => {
     try {
       const response = await axios.post("http://localhost:8080/signin", {
@@ -14,14 +17,16 @@ const Login = () => {
       });
       console.log(response);
       console.log(response.data);
+      localStorage.setItem("loggedUser", JSON.stringify(response.data));
+      dispatch(userAdded(response.data));
       history.push("/");
       Toast("Logged In Successfully", 1);
     } catch (err) {
       //comment  before deploying
-      console.log(err.response.data);
-      console.log("this");
-      Toast(err.response.data.error, 2);
-      Toast(err.response.data.message, 2);
+      console.log(err);
+      // console.log("this");
+      // Toast(err.response.data.error, 2);
+      // Toast(err.response.data.message, 2);
     }
   };
   return (

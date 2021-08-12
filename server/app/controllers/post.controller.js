@@ -6,9 +6,9 @@ const User = db.user;
 exports.createPost = async (req, res) => {
   try {
     const { title, body, pic } = req.body;
-    if (!title || !body) {
+    if (!title || !body || !pic) {
       //pic to be added
-      return res.status(422).send({ error: "Plase add all the fields" });
+      return res.status(422).send({ error: "Please add all the fields" });
     }
     const post = new Post({
       title,
@@ -55,6 +55,6 @@ exports.deletepost = async (req, res) => {
     }
     res.send(post);
   } catch (err) {
-    res.status(500).send({ message: `Could Not able to delete ${err}`});
+    res.status(500).send({ message: `Could Not able to delete ${err}` });
   }
 };
