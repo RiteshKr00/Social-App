@@ -19,7 +19,7 @@ const Signup = () => {
         Toast("Invalid Email", 2);
         return;
       }
-      const response = await axios.post("http://localhost:8080/signup", {
+      const response = await axios.post("/signup", {
         username: username,
         email: email,
         password: password,

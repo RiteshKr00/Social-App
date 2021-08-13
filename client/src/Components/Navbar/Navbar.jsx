@@ -1,8 +1,139 @@
 import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import Toast from "../Toast/Toast";
+import { loggedOut } from "../../reducers/usersSlice";
+import { useHistory } from "react-router-dom";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const users = useSelector((state) => state.users);
+  const history = useHistory();
+  console.log(users);
+  const dispatch = useDispatch();
+  const NavOption = () => {
+    if (Object.keys(users).length !== 0 && users.constructor === Object) {
+      return (
+        <>
+          <Link
+            to="/createpost"
+            className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Create Post
+          </Link>
+
+          <Link
+            to="/profile"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Profile
+          </Link>
+
+          <Link
+            to="#"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Projects
+          </Link>
+          <div className="mr-0">
+            <button
+              className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+              onClick={() => {
+                setIsOpen(false);
+                localStorage.clear();
+                dispatch(loggedOut(users));
+                history.push("/login");
+              }}
+            >
+              LogOut
+            </button>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Link
+            to="/login"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Login
+          </Link>
+
+          <Link
+            to="/signup"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+          >
+            SignUp
+          </Link>
+        </>
+      );
+    }
+  };
+  const NavOptionSm = () => {
+    if (Object.keys(users).length !== 0 && users.constructor === Object) {
+      return (
+        <>
+          <Link
+            to="/profile"
+            className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
+            onClick={() => setIsOpen(false)}
+          >
+            Profile
+          </Link>
+
+          <Link
+            to="#"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            onClick={() => setIsOpen(false)}
+          >
+            Team
+          </Link>
+
+          <Link
+            to="/createpost"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            onClick={() => setIsOpen(false)}
+          >
+            Create Post
+          </Link>
+          <div>
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                localStorage.clear();
+                dispatch(loggedOut(users));
+                history.push("/login");
+              }}
+              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Logout
+            </button>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Link
+            to="/login"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            onClick={() => setIsOpen(false)}
+          >
+            Login
+          </Link>
+
+          <Link
+            to="/signup"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            onClick={() => setIsOpen(false)}
+          >
+            SignUp
+          </Link>
+        </>
+      );
+    }
+  };
   return (
     <div>
       <nav className="bg-gray-800">
@@ -10,46 +141,13 @@ function Navbar() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 text-purple-700">
-                <Link to="/">
+                <Link to={users ? "/" : "/login"}>
                   <h1> SOCIAL APP</h1>
                 </Link>
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  <Link
-                    to="/createpost"
-                    className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Create Post
-                  </Link>
-
-                  <Link
-                    to="/profile"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Profile
-                  </Link>
-
-                  <Link
-                    to="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Projects
-                  </Link>
-
-                  <Link
-                    to="/login"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Login
-                  </Link>
-
-                  <Link
-                    to="/signup"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    SignUp
-                  </Link>
+                  <NavOption />
                 </div>
               </div>
             </div>
@@ -112,40 +210,7 @@ function Navbar() {
           {(ref) => (
             <div className="md:hidden" id="mobile-menu">
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <Link
-                  to="/profile"
-                  className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Profile
-                </Link>
-
-                <Link
-                  to="#"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Team
-                </Link>
-
-                <Link
-                  to="/createpost"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Create Post
-                </Link>
-
-                <Link
-                  to="/login"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Login
-                </Link>
-
-                <Link
-                  to="/signup"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  SignUp
-                </Link>
+                <NavOptionSm />
               </div>
             </div>
           )}

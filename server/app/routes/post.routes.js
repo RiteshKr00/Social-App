@@ -12,7 +12,7 @@ module.exports = function (app) {
   });
   //use middleware in array *
   app.post("/createpost", [authJwt.verifyToken], postcontroller.createPost);
-  app.get("/allpost", postcontroller.allpost);
+  app.get("/allpost", [authJwt.verifyToken], postcontroller.allpost);
   app.get("/mypost", [authJwt.verifyToken], postcontroller.mypost);
   app.delete(
     "/deletepost/:postId",

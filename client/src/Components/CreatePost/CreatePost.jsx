@@ -38,12 +38,12 @@ const CreatePost = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "x-access-token": JSON.parse(localStorage.getItem("jwt")).accessToken,
+            "x-access-token": JSON.parse(localStorage.getItem("loggedUser")).accessToken,
           },
         }
       );
       console.log(response);
-      console.log(JSON.parse(localStorage.getItem("jwt")).accessToken);
+      console.log(JSON.parse(localStorage.getItem("loggedUser")).accessToken);
       console.log(response.data);
       //history.push("/");
       Toast("CreatedPost successfully", 1);

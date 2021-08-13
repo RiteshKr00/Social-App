@@ -11,14 +11,16 @@ const Login = () => {
   const dispatch = useDispatch();
   const DoLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/signin", {
+      const response = await axios.post("/signin", {
         username: username,
         password: password,
       });
       console.log(response);
       console.log(response.data);
       localStorage.setItem("loggedUser", JSON.stringify(response.data));
-      dispatch(userAdded(response.data));
+      const users=response.data;
+      delete users.accessToken;
+      dispatch(userAdded(users));
       history.push("/");
       Toast("Logged In Successfully", 1);
     } catch (err) {

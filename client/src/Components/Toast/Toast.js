@@ -10,6 +10,7 @@ const Toast = (message, type) => {
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
+        pauseOnFocusLoss:false,
         draggable: true,
         progress: undefined,
       });
@@ -21,6 +22,7 @@ const Toast = (message, type) => {
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
+        pauseOnFocusLoss:false,
         draggable: true,
         progress: undefined,
       });

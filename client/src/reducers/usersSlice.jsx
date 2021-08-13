@@ -1,16 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-const initialState = [];
+import Toast from "../Components/Toast/Toast";
+const initialState = {};
 
 const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
     userAdded(state, action) {
-      state.push(action.payload);
+      Object.assign(state, action.payload);
+    },
+    loggedOut: () => {
+      Toast("Logged Out", 2);
+      return initialState;
     },
   },
 });
 
-export const { userAdded } = usersSlice.actions;
+export const { userAdded, loggedOut } = usersSlice.actions;
 export default usersSlice.reducer;
