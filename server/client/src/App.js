@@ -12,7 +12,6 @@ import Profile from "./Components/Profile/Profile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { userAdded } from "./reducers/usersSlice";
-axios.defaults.baseURL = "http://localhost:8080";
 const Routes = () => {
   const history = useHistory();
   const dispatch = useDispatch();

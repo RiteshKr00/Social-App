@@ -58,3 +58,33 @@ exports.deletepost = async (req, res) => {
     res.status(500).send({ message: `Could Not able to delete ${err}` });
   }
 };
+
+exports.likePost = async (req, res) => {
+  try {
+    const postLiked = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $push: { likes: req.userId },
+      },
+      { new: true }
+    );
+    res.send(postLiked);
+  } catch (err) {
+    res.status(500).send({ message: `Could Not able to like ${err}` });
+  }
+};
+
+exports.unlikePost = async (req, res) => {
+  try {
+    const postunLiked = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $pull: { likes: req.userId },
+      },
+      { new: true }
+    );
+    res.send(postunLiked);
+  } catch (err) {
+    res.status(500).send({ message: `Could Not able to unlike ${err}` });
+  }
+};

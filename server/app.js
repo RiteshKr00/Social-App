@@ -11,7 +11,7 @@ var corsOptions = {
 // NEW - replace custom middleware with the cors() middleware
 app.use(cors(corsOptions));
 
-mongoose.connect("mongodb://localhost:27017/GramDB", {
+mongoose.connect(process.env.MONGOURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }); //to connect to database

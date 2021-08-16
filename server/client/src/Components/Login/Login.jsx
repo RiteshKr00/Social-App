@@ -26,9 +26,8 @@ const Login = () => {
     } catch (err) {
       //comment  before deploying
       console.log(err);
-      // console.log("this");
-      // Toast(err.response.data.error, 2);
-      // Toast(err.response.data.message, 2);
+       Toast(err.response.data.error, 2);
+       Toast(err.response.data.message, 2);
     }
   };
   return (

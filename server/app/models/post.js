@@ -13,6 +13,21 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: "true",
     },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    comments: [
+      {
+        text: String,
+        postedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      },
+    ],
     //child referencing
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,

@@ -19,4 +19,6 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     postcontroller.deletepost
   );
+  app.put("/likepost", [authJwt.verifyToken], postcontroller.likePost);
+  app.put("/unlikepost", [authJwt.verifyToken], postcontroller.unlikePost);
 };

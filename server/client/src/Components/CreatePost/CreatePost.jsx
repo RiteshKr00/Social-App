@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Toast from "../Toast/Toast";
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -7,29 +7,31 @@ const CreatePost = () => {
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
   //we can also use file reader in case we want preview of img
-  const UploadPost = async () => {
-    try {
-      const postImage = new FormData();
-      postImage.append("file", image);
-      postImage.append("upload_preset", "SocialApp");
-      postImage.append("cloud_name", "slowgeek");
-      console.log(postImage);
-      //replace it with axios
-      await fetch(" https://api.cloudinary.com/v1_1/slowgeek/image/upload", {
-        method: "POST",
-        body: postImage,
+  const UploadPost = () => {
+    const postImage = new FormData();
+    postImage.append("file", image);
+    postImage.append("upload_preset", "SocialApp");
+    postImage.append("cloud_name", "slowgeek");
+    console.log(postImage);
+    //replace it with axios
+    fetch(" https://api.cloudinary.com/v1_1/slowgeek/image/upload", {
+      method: "POST",
+      body: postImage,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setUrl(result.url);
       })
-        .then((response) => response.json())
-        .then((result) => {
-          console.log(result);
-          setUrl(result.url);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
+  const uploadPostWithImg = async () => {
+    try {
       const response = await axios.post(
-        "http://localhost:8080/createpost",
+        "/createpost",
         {
           title,
           body,
@@ -38,7 +40,8 @@ const CreatePost = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "x-access-token": JSON.parse(localStorage.getItem("loggedUser")).accessToken,
+            "x-access-token": JSON.parse(localStorage.getItem("loggedUser"))
+              .accessToken,
           },
         }
       );
@@ -53,7 +56,11 @@ const CreatePost = () => {
       Toast(err.response.data.error, 2);
     }
   };
-
+  useEffect(() => {
+    if (url) {
+      uploadPostWithImg();
+    }
+  }, [url]);
   return (
     <div className="flex bg-gray-100 py-8">
       <div className="w-full max-w-md m-auto rounded-lg bg-white border border-gray-200 shadow-lg py-10 px-10 md:px-20">
