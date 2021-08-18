@@ -17,8 +17,10 @@ module.exports = function (app) {
   app.delete(
     "/deletepost/:postId",
     [authJwt.verifyToken],
-    postcontroller.deletepost
+    postcontroller.deletePost
   );
   app.put("/likepost", [authJwt.verifyToken], postcontroller.likePost);
   app.put("/unlikepost", [authJwt.verifyToken], postcontroller.unlikePost);
+  app.put("/addComment", [authJwt.verifyToken], postcontroller.addComment);
+  
 };

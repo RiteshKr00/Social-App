@@ -1,4 +1,4 @@
-const jwt = require("jsonWebtoken");
+const jwt = require("jsonwebtoken");
 const JWT = process.env.JWT_SEC;
 const db = require("../models");
 const User = db.user;

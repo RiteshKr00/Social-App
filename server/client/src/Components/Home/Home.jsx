@@ -3,10 +3,12 @@ import {
   HeartIcon,
   ThumbUpIcon,
   ThumbDownIcon,
+  TrashIcon,
 } from "@heroicons/react/outline";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import Toast from "../Toast/Toast";
 const Home = () => {
   const history = useHistory();
   const users = useSelector((state) => state.users);
@@ -25,13 +27,14 @@ const Home = () => {
         });
         console.log(posts.data.posts);
 
-        console.log(typeof posts.data.posts);
+        //console.log(typeof posts.data.posts);
         setPost(posts.data.posts);
       }
     } catch (err) {
       //comment  before deploying
       console.log(err);
-      // Toast(err.response.data.error, 2);
+      console.log(err.response);
+      Toast(err.response.data.error, 2);
       // Toast(err.response.data.message, 2);
     }
   };
@@ -96,8 +99,33 @@ const Home = () => {
       setPost(newData);
     } catch (err) {
       console.log(err.response.data);
-      console.log("this");
-      //Toast(err.response.data.error, 2);
+      Toast(err.response.data.error, 2);
+    }
+  };
+
+  const deletePost = async (postId) => {
+    try {
+      console.log(JSON.parse(localStorage.getItem("loggedUser")).accessToken);
+      const response = await axios({
+        url: `/deletepost/${postId}`,
+        method: "delete",
+        data: { postId },
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": JSON.parse(localStorage.getItem("loggedUser"))
+            .accessToken,
+        },
+      });
+      console.log(response);
+      const newData = post.filter((item) => {
+        return item._id !== response.data._id;
+      });
+      setPost(newData);
+      Toast("Post Deleted", 1);
+    } catch (err) {
+      console.log(err.response);
+      console.log(err.response.data);
+      Toast(err.response.data.error, 2);
     }
   };
 
@@ -105,19 +133,61 @@ const Home = () => {
     fetchpost();
   }, []);
 
+  const addComment = async (text, postId) => {
+    try {
+      const response = await axios.put(
+        "/addComment",
+        {
+          postId,
+          text,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": JSON.parse(localStorage.getItem("loggedUser"))
+              .accessToken,
+          },
+        }
+      );
+      console.log(response);
+      const newData = post.map((item) => {
+        //this will update data array, if post matched,with fetched result
+        if (item._id === response.data._id) {
+          return response.data;
+        } else {
+          return item;
+        }
+      });
+
+      setPost(newData);
+    } catch (err) {
+      console.log(err.response.data);
+      console.log("this");
+      //Toast(err.response.data.error, 2);
+    }
+  };
+
   return (
-    <div className=" mx-10 flex flex-col px-auto md:px-24 lg:px-56">
+    <div className=" mx-10 flex flex-col px-auto md:px-24 lg:px-56 ">
       {post.map((item) => {
         return (
           <div
-            className="border-4 border-purple-200 my-2 justify-center"
+            className="rounded border-4 border-gray-900 my-2 justify-center shadow-2xl	"
             key={item._id}
           >
-            <h1>{item.postedBy.username}</h1>
+            <h1 className="bg-gradient-to-r from-green-400 to-blue-500  pl-2 py-1">
+              {item.postedBy._id === users.id ? "You" : item.postedBy.username}
+              {item.postedBy._id === users.id && (
+                <TrashIcon
+                  className="h-5 w-5 mx-1 float-right text-white-500 hover:text-red-500"
+                  onClick={() => deletePost(item._id)}
+                />
+              )}
+            </h1>
             <div>
               <img className="w-full " src={item.photo} alt="profile" />
             </div>
-            <div className="px-2 py-2">
+            <div className="bg-gradient-to-br from-green-400 to-blue-500 px-2 py-2">
               <div className="flex ">
                 <HeartIcon className="h-5 w-5 mx-1 text-white-500" />
                 {item.likes.includes(users.id) ? (
@@ -134,12 +204,34 @@ const Home = () => {
               </div>
               <h5>{item.likes.length} likes</h5>
               <h5>{item.title}</h5>
-              <p>{item.body}</p>
-              <input
-                className="outline-none w-full border-b-4"
-                type="text"
-                placeholder="Add a comment"
-              ></input>
+              <p className="justify">{item.body.length>30?item.body.substring(0,20)+"...Read more":item.body.substring(0,40)}</p>
+              {item.comments.map((comment) => {
+                return (
+                  <h6 key={comment._id}>
+                    <span style={{ fontWeight: "500" }}>
+                      {comment.postedBy._id === users.id
+                        ? "You"
+                        : comment.postedBy.username}
+                    </span>
+                    <span> {comment.text.length>40?comment.text.substring(0,20)+"...Read more":comment.text.substring(0,40)}</span>
+                  </h6>
+                );
+              })}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  console.log(e.target[0].value);
+                  addComment(e.target[0].value, item._id);
+                  e.target[0].value = "";
+                  console.log(e.target[0].value);
+                }}
+              >
+                <input
+                  className=" rounded outline-none w-full border-b-4 focus:border-red-500"
+                  type="text"
+                  placeholder="Add a comment ..."
+                ></input>
+              </form>
             </div>
           </div>
         );
@@ -173,15 +265,22 @@ const Home = () => {
             alt="profile"
           />
         </div>
-        <div className="px-2 py-2">
+        <div className="bg-gray-900 text-purple-500 px-2 py-2">
           <HeartIcon className="h-5 w-5 text-blue-500" />
           <h5>title</h5>
           <p>comment is comment</p>
-          <input
-            className="outline-none w-full border-b-4"
-            type="text"
-            placeholder="Add a comment"
-          ></input>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log(e.target);
+            }}
+          >
+            <input
+              className="outline-none w-full border-b-4"
+              type="text"
+              placeholder="Add a comment ..."
+            ></input>
+          </form>
         </div>
       </div>
     </div>

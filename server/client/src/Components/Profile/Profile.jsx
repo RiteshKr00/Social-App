@@ -31,8 +31,8 @@ const Profile = () => {
     fetchmypost();
   }, []);
   return (
-    <div className="mx-10">
-      <div className="flex flex-wrap content-around my-9 border-b-4">
+    <div className="mx-10 h-full">
+      <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-xl p-6 flex flex-wrap content-around my-9 border-b-4">
         <div>
           <img
             className="rounded-full h-48 w-48"
@@ -49,11 +49,11 @@ const Profile = () => {
             <h6 className="px-2">0 following</h6>
           </div>
         </div>
-      </div>
-      <div className="grid grid-cols-3 gap-4">
+      </div><h1 className="font-bold text-2xl py-2">My Posts</h1>
+      <div className="grid grid-cols-3 gap-4 ">
         {post.map((item) => {
           return (
-            <img className="h-full w-full" src={item.photo} alt="profile" />
+            <img className=" border-4 border-gray-900 h-full w-full" src={item.photo} alt="profile" />
           );
         })}
       </div>

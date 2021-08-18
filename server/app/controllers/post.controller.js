@@ -25,7 +25,8 @@ exports.createPost = async (req, res) => {
 exports.allpost = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("postedBy", "_id username") //way to populate postedBy and selected field only;
+      .populate("postedBy", "_id username")
+      .populate("comments.postedBy", "_id username") //way to populate postedBy and selected field only;
       .sort("-createdAt");
     res.json({ posts });
   } catch (err) {
@@ -42,11 +43,11 @@ exports.mypost = async (req, res) => {
     res.status(500).send({ err: err });
   }
 };
-exports.deletepost = async (req, res) => {
+exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.postId }).populate(
       "postedBy",
-      "_id"
+      "_id username"
     );
     //Objects are not like arrays or strings. So simply comparing by using "===" or "==" is not possible. Here to compare we have to first stringify the object
     console.log(typeof req.userId);
@@ -67,7 +68,9 @@ exports.likePost = async (req, res) => {
         $push: { likes: req.userId },
       },
       { new: true }
-    );
+    )
+      .populate("postedBy", "_id username")
+      .populate("comments.postedBy", "_id username");
     res.send(postLiked);
   } catch (err) {
     res.status(500).send({ message: `Could Not able to like ${err}` });
@@ -82,9 +85,32 @@ exports.unlikePost = async (req, res) => {
         $pull: { likes: req.userId },
       },
       { new: true }
-    );
+    )
+      .populate("postedBy", "_id username")
+      .populate("comments.postedBy", "_id username");
     res.send(postunLiked);
   } catch (err) {
     res.status(500).send({ message: `Could Not able to unlike ${err}` });
+  }
+};
+
+exports.addComment = async (req, res) => {
+  try {
+    const comment = {
+      text: req.body.text,
+      postedBy: req.userId,
+    };
+    const postCommented = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $push: { comments: comment },
+      },
+      { new: true }
+    )
+      .populate("postedBy", "_id username")
+      .populate("comments.postedBy", "_id username");
+    res.send(postCommented);
+  } catch (err) {
+    res.status(500).send({ message: `Could Not able to Comment ${err}` });
   }
 };
