@@ -5,7 +5,7 @@ import {
   ThumbDownIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Toast from "../Toast/Toast";
@@ -166,7 +166,35 @@ const Home = () => {
       //Toast(err.response.data.error, 2);
     }
   };
-
+  const deleteComment = async (postId, commentId) => {
+    console.log(postId, commentId);
+    try {
+      const response = await axios({
+        url: `/deletecomment/${commentId}`,
+        method: "delete",
+        data: { postId },
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": JSON.parse(localStorage.getItem("loggedUser"))
+            .accessToken,
+        },
+      });
+      console.log(response);
+      const newData = post.map((item) => {
+        if (item._id === response.data._id) {
+          return response.data;
+        } else {
+          return item;
+        }
+      });
+      setPost(newData);
+      Toast("Comment Deleted", 1);
+    } catch (err) {
+      console.log(err.response);
+      Toast(err.response.data.message, 2);
+      Toast(err.response.data.error, 2);
+    }
+  };
   return (
     <div className=" mx-10 flex flex-col px-auto md:px-24 lg:px-56 ">
       {post.map((item) => {
@@ -176,7 +204,8 @@ const Home = () => {
             key={item._id}
           >
             <h1 className="bg-gradient-to-r from-green-400 to-blue-500  pl-2 py-1">
-              {item.postedBy._id === users.id ? "You" : item.postedBy.username}
+              <Link to={item.postedBy._id !== users.id?"/profile/"+item.postedBy._id:"/profile/"}>
+              {item.postedBy._id === users.id ? "You" : item.postedBy.username}</Link>
               {item.postedBy._id === users.id && (
                 <TrashIcon
                   className="h-5 w-5 mx-1 float-right text-white-500 hover:text-red-500"
@@ -204,19 +233,47 @@ const Home = () => {
               </div>
               <h5>{item.likes.length} likes</h5>
               <h5>{item.title}</h5>
-              <p className="justify">{item.body.length>30?item.body.substring(0,20)+"...Read more":item.body.substring(0,40)}</p>
-              {item.comments.map((comment) => {
-                return (
-                  <h6 key={comment._id}>
-                    <span style={{ fontWeight: "500" }}>
-                      {comment.postedBy._id === users.id
-                        ? "You"
-                        : comment.postedBy.username}
-                    </span>
-                    <span> {comment.text.length>40?comment.text.substring(0,20)+"...Read more":comment.text.substring(0,40)}</span>
-                  </h6>
-                );
-              })}
+              <p className="justify">
+                {item.body.length > 30
+                  ? item.body.substring(0, 20) + "...Read more"
+                  : item.body.substring(0, 40)}
+              </p>
+              {item.comments.length ? (
+                <div className=" mt-1 text-gray-600">
+                  <h5>Comments</h5>
+                  <div className="">
+                    {item.comments.map((comment) => {
+                      return (
+                        <h6 key={comment._id}>
+                          <span style={{ fontWeight: "500" }}>
+                            {comment.postedBy._id === users.id
+                              ? "You"
+                              : comment.postedBy.username}
+                          </span>
+                          <span>
+                            {" "}
+                            {comment.text.length > 40
+                              ? comment.text.substring(0, 20) + "...Read more"
+                              : comment.text.substring(0, 40)}
+                          </span>
+                          {comment.postedBy._id === users.id ? (
+                            <TrashIcon
+                              className="h-5 w-5 mx-1 float-right text-white-500 hover:text-red-500"
+                              onClick={() =>
+                                deleteComment(item._id, comment._id)
+                              }
+                            />
+                          ) : (
+                            comment.postedBy.username
+                          )}
+                        </h6>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
               <form
                 onSubmit={(e) => {
                   e.preventDefault();

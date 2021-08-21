@@ -29,6 +29,7 @@ app.use(express.json()); //repalcement of bodyparser
 //
 require("./app/routes/auth.routes")(app);
 require("./app/routes/post.routes")(app);
+require("./app/routes/user.routes")(app);
 
 app.listen(process.env.PORT, () => {
   console.log("Server is runnng at port", process.env.PORT);

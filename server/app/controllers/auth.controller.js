@@ -49,11 +49,14 @@ exports.signin = async (req, res) => {
     var token = jwt.sign({ id: user.id }, JWT, {
       expiresIn: 86400, // 24 hours
     });
-
+    console.log(user);
     res.status(200).send({
       id: user._id,
       username: user.username,
       email: user.email,
+      post: user.post,
+      following: user.following,
+      followers: user.followers,
       accessToken: token,
     });
   } catch (err) {

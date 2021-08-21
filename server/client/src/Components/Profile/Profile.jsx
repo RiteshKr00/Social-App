@@ -31,7 +31,7 @@ const Profile = () => {
     fetchmypost();
   }, []);
   return (
-    <div className="mx-10 h-full">
+    <div className="mx-10 h-screen">
       <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-xl p-6 flex flex-wrap content-around my-9 border-b-4">
         <div>
           <img
@@ -49,13 +49,23 @@ const Profile = () => {
             <h6 className="px-2">0 following</h6>
           </div>
         </div>
-      </div><h1 className="font-bold text-2xl py-2">My Posts</h1>
-      <div className="grid grid-cols-3 gap-4 ">
-        {post.map((item) => {
-          return (
-            <img className=" border-4 border-gray-900 h-full w-full" src={item.photo} alt="profile" />
-          );
-        })}
+      </div>
+      <div className="bg-gradient-to-br from-green-400 to-blue-500 justify-center rounded-xl p-6 flex flex-wrap content-around my-9 border-b-4">
+        <h1 className="font-bold text-2xl py-2 ">My Posts</h1>
+        <div className="flex justify-center item-center">
+          <div className="grid grid-cols-3 gap-4 px-12 h-4/5 w-4/5">
+            {post.map((pics) => {
+              return (
+                <img
+                  key={pics._id}
+                  className=" border-4 border-gray-900 h-full w-full"
+                  src={pics.photo}
+                  alt="profile"
+                />
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

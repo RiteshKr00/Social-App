@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 import Toast from "../Toast/Toast";
 import styles from "./SignUp.module.css";
 const axios = require("axios");
@@ -36,63 +36,76 @@ const Signup = () => {
   };
 
   return (
-    <div className={`flex bg-gray-100 py-8 ${styles}`}>
-      <div className="w-full max-w-md bg-gradient-to-br from-green-400 to-blue-500 m-auto rounded-lg border border-gray-200 shadow-lg py-10 px-10 md:px-20">
-        <h2 className="text-2xl text-center pt-4 pb-5 text-primary	">
-          Social App
-        </h2>
-
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            placeholder="Your Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className={
-              "w-full p-2 text-primary rounded-md transition duration-150 ease-in-out mb-4"
-            }
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={
-              "w-full  p-2 text-primary rounded-md transition duration-150 ease-in-out mb-4"
-            }
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Your Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={
-              "w-full  p-2 text-primary rounded-md transition duration-150 ease-in-out mb-4"
-            }
-          />
-        </div>
-
-        <div className="flex justify-center item-center">
-          <button
-            id="signup"
-            type="submit"
-            className={
-              "py-2 px-4 text-white rounded bg-gray-700 hover:bg-gray-800  active:border-black"
-            }
-            onClick={() => Register()}
-          >
-            Signup
-          </button>
+    <div className="h-screen">
+      <div
+        className={`bg-gradient-to-r from-green-200 to-blue-200 flex bg-gray-100 py-8 ${styles}`}
+      >
+        <div className="w-full max-w-md bg-gradient-to-br from-green-400 to-blue-500 m-auto rounded-lg border border-gray-200 shadow-lg py-10 px-10 md:px-20">
+          <h2 className="text-2xl text-center pt-4 pb-5 text-primary	">
+            Social App
+          </h2>
+          <div>
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Your Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className={
+                "w-full p-2 text-primary rounded-md transition duration-150 ease-in-out mb-4"
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Your Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={
+                "w-full  p-2 text-primary rounded-md transition duration-150 ease-in-out mb-4"
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Your Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={
+                "w-full  p-2 text-primary rounded-md transition duration-150 ease-in-out mb-4"
+              }
+            />
+          </div>
+          <div className="flex justify-center item-center">
+            <button
+              id="signup"
+              type="submit"
+              className={
+                "py-2 px-4 text-white rounded bg-gray-700 hover:bg-gray-800  active:border-black"
+              }
+              onClick={() => Register()}
+            >
+              Signup
+            </button>
+          </div>{" "}
+          <div className="py-2 flex justify-center item-center">
+            <h2>
+              Already have an account ?
+              <Link
+                to="/login"
+                className="text-gray-300  hover:text-red-500 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Login
+              </Link>
+            </h2>
+          </div>
         </div>
       </div>
     </div>

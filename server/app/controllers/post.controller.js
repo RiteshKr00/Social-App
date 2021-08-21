@@ -114,3 +114,22 @@ exports.addComment = async (req, res) => {
     res.status(500).send({ message: `Could Not able to Comment ${err}` });
   }
 };
+exports.deleteComment = async (req, res) => {
+  try {
+    const comment = await Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $pull: { comments: { _id: req.params.commentId } },
+      },
+      {
+        new: true,
+      }
+    )
+      .populate("comments.postedBy", "_id name")
+      .populate("postedBy", "_id username");
+    //Objects are not like arrays or strings. So simply comparing by using "===" or "==" is not possible. Here to compare we have to first stringify the object
+    res.send(comment);
+  } catch (err) {
+    res.status(500).send({ message: `Could Not able to delete ${err}` });
+  }
+};

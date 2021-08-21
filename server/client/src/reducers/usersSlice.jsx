@@ -9,6 +9,9 @@ const usersSlice = createSlice({
     userAdded(state, action) {
       Object.assign(state, action.payload);
     },
+    userDetailUpdated(state, action) {
+      Object.assign(state, action.payload);
+    },
     loggedOut: () => {
       Toast("Logged Out", 2);
       return initialState;
@@ -16,5 +19,5 @@ const usersSlice = createSlice({
   },
 });
 
-export const { userAdded, loggedOut } = usersSlice.actions;
+export const { userAdded, userDetailUpdated, loggedOut } = usersSlice.actions;
 export default usersSlice.reducer;

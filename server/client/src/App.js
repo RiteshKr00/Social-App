@@ -12,6 +12,7 @@ import Profile from "./Components/Profile/Profile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { userAdded } from "./reducers/usersSlice";
+import UserProfile from "./Components/UserProfile/UserProfile";
 const Routes = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -40,6 +41,9 @@ const Routes = () => {
       </Route>
       <Route exact path="/createpost">
         <CreatePost />
+      </Route>
+      <Route path="/profile/:userId">
+        <UserProfile />
       </Route>
     </Switch>
   );

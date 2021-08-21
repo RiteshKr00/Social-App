@@ -15,20 +15,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    following: {
-      total: {
-        type: Number,
-        default: 0,
-      },
-      by: [{ type: ObjectId, ref: "User" }],
-    },
-    followers: {
-      total: {
-        type: Number,
-        default: 0,
-      },
-      by: [{ type: ObjectId, ref: "User" }],
-    },
+    following: [{ type: ObjectId, ref: "User" }],
+    followers: [{ type: ObjectId, ref: "User" }],
     post: {
       //can be removed and postSchema postedBy can be used to retrieve no of Post
       total: {

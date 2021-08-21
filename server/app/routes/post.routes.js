@@ -22,5 +22,9 @@ module.exports = function (app) {
   app.put("/likepost", [authJwt.verifyToken], postcontroller.likePost);
   app.put("/unlikepost", [authJwt.verifyToken], postcontroller.unlikePost);
   app.put("/addComment", [authJwt.verifyToken], postcontroller.addComment);
-  
+  app.delete(
+    "/deletecomment/:commentId",
+    [authJwt.verifyToken],
+    postcontroller.deleteComment
+  );
 };
