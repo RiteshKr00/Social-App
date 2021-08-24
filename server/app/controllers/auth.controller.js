@@ -17,6 +17,7 @@ exports.signup = async (req, res) => {
       username: req.body.username,
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, 8),
+      pic: req.body.pic,
     });
     await user.save();
 
@@ -55,6 +56,7 @@ exports.signin = async (req, res) => {
       username: user.username,
       email: user.email,
       post: user.post,
+      pic: user.pic,
       following: user.following,
       followers: user.followers,
       accessToken: token,

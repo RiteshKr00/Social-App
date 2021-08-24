@@ -17,45 +17,68 @@ exports.getUser = async (req, res) => {
   }
 };
 exports.followUser = async (req, res) => {
-  const userFollowed = await User.findByIdAndUpdate(
-    req.body.followId,
-    {
-      $push: { followers: req.userId },
-    },
-    { new: true }
-  ).select("-password");;
-  const userHimself = await User.findByIdAndUpdate(
-    req.userId,
-    {
-      $push: { following: req.body.followId },
-    },
-    {
-      new: true,
-    }
-  ).select("-password");
-  console.log(userFollowed);
-  console.log(userHimself);
-  res.send({ userFollowed, userHimself });
+  try {
+    const userFollowed = await User.findByIdAndUpdate(
+      req.body.followId,
+      {
+        $push: { followers: req.userId },
+      },
+      { new: true }
+    ).select("-password");
+    const userHimself = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        $push: { following: req.body.followId },
+      },
+      {
+        new: true,
+      }
+    ).select("-password");
+    console.log(userFollowed);
+    console.log(userHimself);
+    res.send({ userFollowed, userHimself });
+  } catch (err) {
+    res.status(500).send({ message: `Could not Able to follow ` });
+  }
 };
 
 exports.unfollowUser = async (req, res) => {
-  const userUnfollowed = await User.findByIdAndUpdate(
-    req.body.followId,
-    {
-      $pull: { followers: req.userId },
-    },
-    { new: true }
-  ).select("-password");
-  const userHimself = await User.findByIdAndUpdate(
-    req.userId,
-    {
-      $pull: { following: req.body.followId },
-    },
-    {
-      new: true,
-    }
-  ).select("-password");
-  console.log(userUnfollowed);
-  console.log(userHimself);
-  res.send({ userUnfollowed, userHimself });
+  try {
+    const userUnfollowed = await User.findByIdAndUpdate(
+      req.body.followId,
+      {
+        $pull: { followers: req.userId },
+      },
+      { new: true }
+    ).select("-password");
+    const userHimself = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        $pull: { following: req.body.followId },
+      },
+      {
+        new: true,
+      }
+    ).select("-password");
+    console.log(userUnfollowed);
+    console.log(userHimself);
+    res.send({ userUnfollowed, userHimself });
+  } catch (err) {
+    res.status(500).send({ message: `Could not Able to follow ` });
+  }
+};
+exports.updatePic = async (req, res) => {
+  try {
+    const userUpdated = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        $set: { pic: req.body.pic },
+      },
+      { new: true }
+    ).select("-password");
+    console.log(userUpdated);
+    res.status(200).send(userUpdated);
+  } catch (err) {
+    res.status(500).send({ message: `Pic Not Updated ${err} ` });
+  }
 };

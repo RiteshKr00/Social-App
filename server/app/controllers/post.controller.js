@@ -25,7 +25,7 @@ exports.createPost = async (req, res) => {
 exports.allpost = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate("postedBy", "_id username")
+      .populate("postedBy", "_id username pic")
       .populate("comments.postedBy", "_id username") //way to populate postedBy and selected field only;
       .sort("-createdAt");
     res.json({ posts });

@@ -14,4 +14,5 @@ module.exports = function (app) {
   app.get("/user/:id", [authJwt.verifyToken], usercontroller.getUser);
   app.put("/follow", [authJwt.verifyToken], usercontroller.followUser);
   app.put("/unfollow", [authJwt.verifyToken], usercontroller.unfollowUser);
+  app.put("/updatepic", [authJwt.verifyToken], usercontroller.updatePic);
 };

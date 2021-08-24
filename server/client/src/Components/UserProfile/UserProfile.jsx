@@ -38,9 +38,7 @@ const UserProfile = () => {
   useEffect(() => {
     const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
     if (loggedUser.following.includes(userId)) {
-      console.log(showFollow);
       setshowFollow(false);
-      console.log(showFollow);
     } else {
       setshowFollow(true);
     }
@@ -135,8 +133,8 @@ const UserProfile = () => {
             <div>
               <img
                 className="rounded-full h-48 w-48"
-                src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-                alt="profile"
+                src={profile.user.pic}
+                alt="profileImg"
               ></img>
             </div>
             <div className="mx-8">

@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import Toast from "../Toast/Toast";
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
+  const [imgName, setImgName] = useState(null);
+  const history = useHistory();
   //we can also use file reader in case we want preview of img
   const UploadPost = () => {
     const postImage = new FormData();
@@ -48,7 +51,7 @@ const CreatePost = () => {
       console.log(response);
       console.log(JSON.parse(localStorage.getItem("loggedUser")).accessToken);
       console.log(response.data);
-      //history.push("/");
+      history.push("/");
       Toast("CreatedPost successfully", 1);
     } catch (err) {
       console.log(err.response.data);
@@ -86,25 +89,33 @@ const CreatePost = () => {
             rows={4}
             onChange={(e) => {
               setBody(e.target.value);
-              console.log(body);
             }}
             className="rounded bg-gradient-to-r from-green-200 to-blue-200 outline-none w-full my-2 py-2 border-b-4"
           />
-          {/* <label for="pic-upload" 
-            className="bg-indigo-400 text-white p-2 my-5 rounded-md border-b-4">
-    Upload Pic
-</label> */}
-          <input
-            type="file"
-            accept="image/*"
-            className="outline-none w-full my-2 py-2 border-b-4"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
+          <div className="w-full">
+            <h1 className="p-2 my-1">Choose Image :</h1>
+            <label
+              for="pic-upload"
+              className="text-center bg-indigo-400 text-white p-2 my-5 rounded-md "
+            >
+              {imgName ? imgName.substring(0, 30) : "Upload Pic"}
+            </label>
+            <input
+              id="pic-upload"
+              type="file"
+              accept="image/*"
+              className="hidden outline-none my-2 py-2 border-b-4"
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+                setImgName(e.target.files[0].name);
+              }}
+            />
+          </div>
 
           <div className="flex justify-center item-center">
             <button
               className={
-                "py-2 px-4 text-white rounded bg-gray-700 hover:bg-gray-800  active:border-black"
+                "my-4 py-2 px-4 text-white rounded bg-gray-700 hover:bg-gray-800  active:border-black"
               }
               onClick={() => UploadPost()}
             >

@@ -15,16 +15,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    pic: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/slowgeek/image/upload/ar_1:1,b_rgb:262c35,bo_5px_solid_rgb:ff0000,c_fill,g_auto,r_max,w_1000/v1628682553/enxx01pxot2zjqmvola9.jpg",
+    },
     following: [{ type: ObjectId, ref: "User" }],
     followers: [{ type: ObjectId, ref: "User" }],
-    post: {
-      //can be removed and postSchema postedBy can be used to retrieve no of Post
-      total: {
-        type: Number,
-        default: 0,
-      },
-      Posts: [{ type: ObjectId, ref: "Post" }],
-    },
   },
   { timestamps: true }
 );

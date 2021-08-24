@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link,useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import Toast from "../Toast/Toast";
 import styles from "./SignUp.module.css";
 const axios = require("axios");
@@ -8,9 +8,44 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState(undefined);
+  const [imgName, setImgName] = useState(null);
   const history = useHistory();
+
+  useEffect(() => {
+    if (url) {
+      Register();
+    }
+  }, [url]);
+
+  const UploadImg = () => {
+    const postImage = new FormData();
+    postImage.append("file", image);
+    postImage.append("upload_preset", "SocialApp");
+    postImage.append("cloud_name", "slowgeek");
+    console.log(postImage);
+    //replace it with axios
+    fetch(" https://api.cloudinary.com/v1_1/slowgeek/image/upload", {
+      method: "POST",
+      body: postImage,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setUrl(result.url);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   const Register = async () => {
     try {
+      if (username.length < 3 || username.length > 15) {
+        Toast("Name length be from 3 to 15 characters", 2);
+        return;
+      }
       if (
         !/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
           email
@@ -19,10 +54,16 @@ const Signup = () => {
         Toast("Invalid Email", 2);
         return;
       }
+      if (password.length < 5) {
+        Toast("Length of the password must be at least 5", 2);
+        return;
+      }
+
       const response = await axios.post("/signup", {
         username: username,
         email: email,
         password: password,
+        pic: url,
       });
       console.log(response);
       console.log(response.data);
@@ -32,6 +73,14 @@ const Signup = () => {
       console.log(err.response.data);
       Toast(err.response.data.error, 2);
       Toast(err.response.data.message, 2);
+    }
+  };
+
+  const handleSignup = () => {
+    if (image) {
+      UploadImg();
+    } else {
+      Register();
     }
   };
 
@@ -83,14 +132,33 @@ const Signup = () => {
               }
             />
           </div>
+          <div className="w-full">
+            <h1 className="p-2 my-1">Choose Profile Picture :</h1>
+            <label
+              for="pic-upload"
+              className="text-center bg-indigo-400 text-white p-2 my-5 rounded-md "
+            >
+              {imgName ? imgName.substring(0, 30) : "Upload Pic"}
+            </label>
+            <input
+              id="pic-upload"
+              type="file"
+              accept="image/*"
+              className="hidden outline-none my-2 py-2 border-b-4"
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+                setImgName(e.target.files[0].name);
+              }}
+            />
+          </div>
           <div className="flex justify-center item-center">
             <button
               id="signup"
               type="submit"
               className={
-                "py-2 px-4 text-white rounded bg-gray-700 hover:bg-gray-800  active:border-black"
+                "my-4 py-2 px-4 text-white rounded bg-gray-700 hover:bg-gray-800  active:border-black"
               }
-              onClick={() => Register()}
+              onClick={() => handleSignup()}
             >
               Signup
             </button>

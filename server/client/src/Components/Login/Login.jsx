@@ -18,6 +18,7 @@ const Login = () => {
       console.log(response);
       console.log(response.data);
       localStorage.setItem("loggedUser", JSON.stringify(response.data));
+      console.log(response.data);
       const users = response.data;
       delete users.accessToken;
       dispatch(userAdded(users));

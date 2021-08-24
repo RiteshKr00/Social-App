@@ -204,8 +204,24 @@ const Home = () => {
             key={item._id}
           >
             <h1 className="bg-gradient-to-r from-green-400 to-blue-500  pl-2 py-1">
-              <Link to={item.postedBy._id !== users.id?"/profile/"+item.postedBy._id:"/profile/"}>
-              {item.postedBy._id === users.id ? "You" : item.postedBy.username}</Link>
+              <Link
+                className="h-5 w-5 mx-1 text-white-500 hover:underline"
+                to={
+                  item.postedBy._id !== users.id
+                    ? "/profile/" + item.postedBy._id
+                    : "/profile/"
+                }
+              >
+                {" "}
+                <img
+                  className="mx-1 float-left text-white-500 rounded-full h-6 w-6"
+                  src={item.postedBy.pic}
+                  alt="profileImg"
+                ></img>
+                {item.postedBy._id === users.id
+                  ? "You"
+                  : item.postedBy.username}
+              </Link>
               {item.postedBy._id === users.id && (
                 <TrashIcon
                   className="h-5 w-5 mx-1 float-right text-white-500 hover:text-red-500"
