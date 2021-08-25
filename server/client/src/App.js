@@ -13,6 +13,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { userAdded } from "./reducers/usersSlice";
 import UserProfile from "./Components/UserProfile/UserProfile";
+import ForgetPassword from "./Components/passwordReset/ForgetPassword";
+import SetNewPassword from "./Components/passwordReset/SetNewPassword";
 const Routes = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -22,7 +24,9 @@ const Routes = () => {
     if (users) delete users.accessToken;
     dispatch(userAdded(user));
     if (!user) {
-      history.push("/login");
+      if (!history.location.pathname.startsWith("/resetpassword")) {
+        history.push("/login");
+      }
     }
   }, []);
   return (
@@ -44,6 +48,12 @@ const Routes = () => {
       </Route>
       <Route path="/profile/:userId">
         <UserProfile />
+      </Route>
+      <Route exact path="/resetpassword">
+        <ForgetPassword />
+      </Route>
+      <Route path="/resetpassword/:token">
+        <SetNewPassword />
       </Route>
     </Switch>
   );

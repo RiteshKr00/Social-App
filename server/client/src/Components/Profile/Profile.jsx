@@ -90,7 +90,7 @@ const Profile = () => {
       //------------------------------------------------
       console.log(response);
       console.log(response.data);
-      setShowUpload(false);
+      // setShowUpload(false);
       // //history.push("/");
       Toast("Updated Profile Picture", 1);
     } catch (err) {
@@ -129,7 +129,10 @@ const Profile = () => {
             )}
           </label>
           <div
-            onClick={UpdateProfilePic}
+            onClick={() => {
+              UpdateProfilePic();
+              setShowUpload(false);
+            }}
             className={`${
               showUpload ? "" : "hidden"
             } z-50 bg-gradient-to-r hover:from-green-400 hover:to-blue-500 from-pink-500 to-yellow-500 absolute bottom-4 right-4 rounded-full h-6 w-6`}

@@ -82,3 +82,4 @@ exports.updatePic = async (req, res) => {
     res.status(500).send({ message: `Pic Not Updated ${err} ` });
   }
 };
+

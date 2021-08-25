@@ -20,4 +20,6 @@ module.exports = function (app) {
   );
 
   app.post("/signin", authcontroller.signin);
+  app.post("/resetpassword", authcontroller.resetPassword);
+  app.post("/newpassword", authcontroller.newPassword);
 };

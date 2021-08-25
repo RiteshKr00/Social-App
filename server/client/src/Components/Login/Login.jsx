@@ -84,11 +84,19 @@ const Login = () => {
                 Don't have an account ?
                 <Link
                   to="/signup"
-                  className="text-gray-300  hover:text-red-500 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-300  hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   SignUp
                 </Link>
               </h2>
+            </div>
+            <div className="flex justify-center item-center">
+              <Link
+                to="/resetpassword"
+                className="text-gray-300  hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Forget Password ?
+              </Link>
             </div>
           </>
         </div>

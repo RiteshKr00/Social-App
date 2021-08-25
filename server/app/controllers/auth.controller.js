@@ -3,6 +3,8 @@ const db = require("../models");
 const User = db.user;
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
+const Crypto = require("crypto");
+const SendResetEmail = require("../middleware/SendResetEmail");
 const JWT = process.env.JWT_SEC;
 
 exports.signup = async (req, res) => {
@@ -63,5 +65,49 @@ exports.signin = async (req, res) => {
     });
   } catch (err) {
     res.status(500).send({ err: err });
+  }
+};
+exports.resetPassword = async (req, res) => {
+  try {
+    const randomString = (size = 21) => {
+      return Crypto.randomBytes(size).toString("hex").slice(0, size);
+    };
+    const token = randomString();
+    const user = await User.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { resetToken: token, expireToken: Date.now() + 3600000 } },
+      { useFindAndModify: false }
+    ).select("-password");
+    if (!user) {
+      return res
+        .status(422)
+        .json({ error: "User dont exists with that email" });
+    }
+    SendResetEmail(req.body.email, token);
+    res.send("Password Reset Link Sent");
+  } catch (err) {
+    res.status(500).send({ message: `Email Not Sent ${err} ` });
+  }
+};
+exports.newPassword = async (req, res) => {
+  try {
+    const { password, token } = req.body;
+    const user = await User.findOneAndUpdate(
+      { resetToken: token, expireToken: { $gt: Date.now() } },
+      {
+        $set: {
+          password: await bcrypt.hash(password, 8),
+          resetToken: undefined,
+          expireToken: undefined,
+        },
+      },
+      { useFindAndModify: false }
+    ).select("-password");
+    if (!user) {
+      return res.status(422).json({ error: "Try again session expired" });
+    }
+    res.send("Password Updated");
+  } catch (err) {
+    res.status(500).send({ message: `Password not Updated ${err} ` });
   }
 };
