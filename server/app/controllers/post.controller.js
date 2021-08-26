@@ -26,7 +26,7 @@ exports.allpost = async (req, res) => {
   try {
     const posts = await Post.find()
       .populate("postedBy", "_id username pic")
-      .populate("comments.postedBy", "_id username") //way to populate postedBy and selected field only;
+      .populate("comments.postedBy", "_id username ") //way to populate postedBy and selected field only;
       .sort("-createdAt");
     res.json({ posts });
   } catch (err) {
@@ -69,7 +69,7 @@ exports.likePost = async (req, res) => {
       },
       { new: true }
     )
-      .populate("postedBy", "_id username")
+      .populate("postedBy", "_id username pic")
       .populate("comments.postedBy", "_id username");
     res.send(postLiked);
   } catch (err) {
@@ -86,7 +86,7 @@ exports.unlikePost = async (req, res) => {
       },
       { new: true }
     )
-      .populate("postedBy", "_id username")
+      .populate("postedBy", "_id username pic")
       .populate("comments.postedBy", "_id username");
     res.send(postunLiked);
   } catch (err) {
@@ -107,7 +107,7 @@ exports.addComment = async (req, res) => {
       },
       { new: true }
     )
-      .populate("postedBy", "_id username")
+      .populate("postedBy", "_id username pic")
       .populate("comments.postedBy", "_id username");
     res.send(postCommented);
   } catch (err) {
@@ -125,7 +125,7 @@ exports.deleteComment = async (req, res) => {
         new: true,
       }
     )
-      .populate("comments.postedBy", "_id name")
+      .populate("comments.postedBy", "_id name pic")
       .populate("postedBy", "_id username");
     //Objects are not like arrays or strings. So simply comparing by using "===" or "==" is not possible. Here to compare we have to first stringify the object
     res.send(comment);

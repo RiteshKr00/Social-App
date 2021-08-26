@@ -150,30 +150,9 @@ const Profile = () => {
           <h1>{users.username}</h1>
 
           <div className="flex flex-row py-3">
-            <h6 className="px-2">{post.length} Post</h6>
-            <h6 className="px-2">
-              {users.followers ? users.followers.length : "0"} followers
-            </h6>
-            <h6 className="px-2">
-              {users.following ? users.following.length : "0"} following
-            </h6>
-          </div>
-        </div>
-      </div>
-      <div className="bg-gradient-to-br from-green-400 to-blue-500 justify-center rounded-xl p-6 flex flex-wrap content-around my-9 border-b-4">
-        <h1 className="font-bold text-2xl py-2 ">My Posts</h1>
-        <div className="flex justify-center item-center">
-          <div className="grid grid-cols-3 gap-4 px-12 h-4/5 w-4/5">
-            {post.map((pics) => {
-              return (
-                <img
-                  key={pics._id}
-                  className=" border-4 border-gray-900 h-full w-full"
-                  src={pics.photo}
-                  alt="profile"
-                />
-              );
-            })}
+            <h6 className="px-2">0 Posts</h6>
+            <h6 className="px-2">0 followers</h6>
+            <h6 className="px-2">0 following</h6>
           </div>
         </div>
       </div>
