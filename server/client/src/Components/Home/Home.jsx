@@ -309,53 +309,7 @@ const Home = () => {
           </div>
         );
       })}
-      <div className="border-4 border-purple-200 my-2 justify-center">
-        <h1>Ram</h1>
-        <div>
-          <img
-            className="w-full "
-            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-            alt="profile"
-          />
-        </div>
-        <div className="px-2 py-2">
-          <HeartIcon className="h-5 w-5 text-blue-500" />
-          <h5>title</h5>
-          <p>comment is comment</p>
-          <input
-            className="outline-none w-full border-b-4"
-            type="text"
-            placeholder="Add a comment"
-          ></input>
-        </div>
-      </div>
-      <div className="border-4 border-purple-200 my-2 justify-center">
-        <h1>Ram</h1>
-        <div>
-          <img
-            className="w-full "
-            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-            alt="profile"
-          />
-        </div>
-        <div className="bg-gray-900 text-purple-500 px-2 py-2">
-          <HeartIcon className="h-5 w-5 text-blue-500" />
-          <h5>title</h5>
-          <p>comment is comment</p>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              console.log(e.target);
-            }}
-          >
-            <input
-              className="outline-none w-full border-b-4"
-              type="text"
-              placeholder="Add a comment ..."
-            ></input>
-          </form>
-        </div>
-      </div>
+      
     </div>
   );
 };

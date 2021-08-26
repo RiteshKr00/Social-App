@@ -92,25 +92,13 @@ const CreatePost = () => {
             }}
             className="rounded bg-gradient-to-r from-green-200 to-blue-200 outline-none w-full my-2 py-2 border-b-4"
           />
-          <div className="w-full">
-            <h1 className="p-2 my-1">Choose Image :</h1>
-            <label
-              for="pic-upload"
-              className="text-center bg-indigo-400 text-white p-2 my-5 rounded-md "
-            >
-              {imgName ? imgName.substring(0, 30) : "Upload Pic"}
-            </label>
-            <input
-              id="pic-upload"
-              type="file"
-              accept="image/*"
-              className="hidden outline-none my-2 py-2 border-b-4"
-              onChange={(e) => {
-                setImage(e.target.files[0]);
-                setImgName(e.target.files[0].name);
-              }}
-            />
-          </div>
+          
+          <input
+            type="file"
+            accept="image/*"
+            className="outline-none w-full my-2 py-2 border-b-4"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
 
           <div className="flex justify-center item-center">
             <button

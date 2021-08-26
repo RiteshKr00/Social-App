@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import Toast from "../Toast/Toast";
 import { loggedOut } from "../../reducers/usersSlice";
 import { useHistory } from "react-router-dom";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const users = useSelector((state) => state.users);
   const history = useHistory();
-  console.log(users);
   const dispatch = useDispatch();
   const NavOption = () => {
     if (Object.keys(users).length !== 0 && users.constructor === Object) {
@@ -29,12 +27,6 @@ function Navbar() {
             Profile
           </Link>
 
-          <Link
-            to="#"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-          >
-            Projects
-          </Link>
           <div className="mr-0">
             <button
               className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
@@ -80,14 +72,6 @@ function Navbar() {
             onClick={() => setIsOpen(false)}
           >
             Profile
-          </Link>
-
-          <Link
-            to="#"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            onClick={() => setIsOpen(false)}
-          >
-            Team
           </Link>
 
           <Link
